@@ -1,0 +1,56 @@
+name: whatsapp
+description: A new Flutter project.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=2.19.6 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.2.19
+  google_fonts: ^4.0.4
+  url_launcher: ^6.1.11
+  page_transition: ^2.0.9
+  country_picker: ^2.0.20
+  firebase_core: ^2.15.0
+  firebase_auth: ^4.2.9
+
+flutter_icons:
+  android: "whatsapp"
+  ios: true
+  image_path: "assets/images/logo.png"
+  remove_alpha_ios: true
+  web:
+    generate: true
+    image_path: "assets/images/logo.png"
+    background_color: "#ffffff"
+  windows:
+    generate: true
+    image_path: "assets/images/logo.png"
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  color_dark: "111B21"
+  image: "assets/images/light.png"
+  # image_dark: "assets/images/dark.png"
+  android_12:
+    color: "#FFFFFF"
+    # color_dark: "#111B21"
+    image: "assets/images/light.png"
+    # image_dark: "assets/images/dark.png"
+    icon_background_color: "#FFFFFF"
+    # icon_background_color_dark: "#111B21"
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
