@@ -83,7 +83,8 @@ class Welcome extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 60),
             child: ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, 'verification'),
+              onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                  context, 'verification', (route) => false),
               style: ElevatedButton.styleFrom(
                   minimumSize: const Size(300, 40),
                   shape: RoundedRectangleBorder(

@@ -3,7 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:country_picker/country_picker.dart';
 
-import 'custom_text_field.dart';
+import '../Components/custom_text_field.dart';
+import 'otp_screen.dart';
 
 class Verification extends StatefulWidget {
   const Verification({super.key});
@@ -124,6 +125,7 @@ class _VerificationState extends State<Verification> {
         context: context,
         useSafeArea: true,
         showPhoneCode: true,
+        favorite: ["IN"],
         countryListTheme: CountryListThemeData(
           bottomSheetHeight: MediaQuery.of(context).size.height,
           borderRadius: BorderRadius.circular(0),
@@ -165,17 +167,24 @@ class _VerificationState extends State<Verification> {
 
     Future sendCode() async {
       try {
-        await FirebaseAuth.instance.verifyPhoneNumber(
-          phoneNumber:
-              '+${countryCodeController.text}${phoneNumberController.text}',
-          verificationCompleted: (PhoneAuthCredential credential) {},
-          verificationFailed: (FirebaseAuthException e) {},
-          codeSent: (String verificationId, int? resendToken) {
-            Verification.verify = verificationId;
-            Navigator.pushNamed(context, 'otp');
-          },
-          codeAutoRetrievalTimeout: (verificationId) {},
-        );
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OTP(
+                  phone:
+                      '+${countryCodeController.text} ${phoneNumberController.text}'),
+            ),
+            (route) => false);
+        // await FirebaseAuth.instance.verifyPhoneNumber(
+        //   phoneNumber:
+        //       '+${countryCodeController.text}${phoneNumberController.text}',
+        //   verificationCompleted: (PhoneAuthCredential credential) {},
+        //   verificationFailed: (FirebaseAuthException e) {},
+        //   codeSent: (String verificationId, int? resendToken) {
+        //     Verification.verify = verificationId;
+        //   },
+        //   codeAutoRetrievalTimeout: (verificationId) {},
+        // );
       } on FirebaseAuthException catch (e) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context)

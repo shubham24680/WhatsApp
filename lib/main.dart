@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+// import 'package:whatsapp/profile_info.dart';
+import 'Components/firebase_options.dart';
 
-import 'welcome.dart';
+import 'Screens/Home/home.dart';
 import 'Theme/light_theme.dart';
 // import 'Theme/dark_theme.dart';
-import 'route.dart';
+import 'Components/route.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +34,7 @@ class MainApp extends StatelessWidget {
       onGenerateRoute: (settings) {
         return route(settings);
       },
-      home: const Welcome(),
+      home: const Home(),
     );
   }
 }
