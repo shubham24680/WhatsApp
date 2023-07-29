@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:whatsapp/Theme/custom_theme.dart';
+
+import '/Components/buttons.dart';
+import '/Components/text_style.dart';
+import '/Theme/custom_theme.dart';
 // import 'Theme/custom_theme.dart';
 
 class Welcome extends StatelessWidget {
@@ -19,81 +20,45 @@ class Welcome extends StatelessWidget {
       );
     }
 
-    text(title) {
-      return Text(
-        "$title",
-        maxLines: 2,
-        style: GoogleFonts.varelaRound(),
-      );
-    }
-
-    services(link) async {
-      var url = Uri.parse(link);
-      if (await canLaunchUrl(url)) {
-        await launchUrl(url);
-      } else {
-        throw "Could not launch $url";
-      }
-    }
-
-    textButton(title, link) {
-      return GestureDetector(
-        onTap: () => services(link),
-        child: Text(
-          "$title",
-          style: GoogleFonts.varelaRound(
-            color: Colors.blue[700],
-          ),
-        ),
-      );
-    }
-
     lower() {
       return Column(
-        // mainAxisAlignment: orientation == Orientation.portrait
-        //     ? MainAxisAlignment.start
-        //     : MainAxisAlignment.center,
         children: [
-          Text(
-            "Welcome to WhatsApp",
-            style: GoogleFonts.varelaRound(
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
-            ),
+          const CustomText(
+            title: "Welcome to WhatsApp",
+            size: 24,
+            weight: FontWeight.bold,
           ),
           const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              text("Read our "),
-              textButton("Privacy Policy",
-                  "https://www.whatsapp.com/legal/privacy-policy?lg=en&lc=GB&eea=0"),
-              text(". Tap \"Agree and continue\" to "),
+            children: const [
+              CustomText(title: "Read our "),
+              CustomLink(
+                  title: "Privacy Policy",
+                  link:
+                      "https://www.whatsapp.com/legal/privacy-policy?lg=en&lc=GB&eea=0"),
+              CustomText(title: ". Tap \"Agree and continue\" to "),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              text("accept the "),
-              textButton("Terms and Services.",
-                  "https://www.whatsapp.com/legal/terms-of-service?lg=en&lc=GB&eea=0"),
+            children: const [
+              CustomText(title: "accept the "),
+              CustomLink(
+                  title: "Terms and Services.",
+                  link:
+                      "https://www.whatsapp.com/legal/terms-of-service?lg=en&lc=GB&eea=0"),
             ],
           ),
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 60),
-            child: ElevatedButton(
+            child: CustomElevatedButton(
               onPressed: () => Navigator.pushNamedAndRemoveUntil(
                   context, 'verification', (route) => false),
-              style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(300, 40),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  )),
-              child: Text(
-                "AGREE AND CONTINUE",
-                style: GoogleFonts.varelaRound(fontSize: 12),
-              ),
+              width: 300,
+              height: 40,
+              title: "AGREE AND CONTINUE",
             ),
           )
         ],

@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:country_picker/country_picker.dart';
 
-import '../Components/custom_text_field.dart';
+import '/Components/dialog.dart';
+import '/Components/buttons.dart';
+import '/Components/text_style.dart';
 import 'otp_screen.dart';
 
 class Verification extends StatefulWidget {
@@ -41,82 +43,25 @@ class _VerificationState extends State<Verification> {
     appbar() {
       return AppBar(
         automaticallyImplyLeading: false,
-        elevation: 0,
         centerTitle: true,
-        title: Text(
-          "Enter your phone number",
-          style: GoogleFonts.varelaRound(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-        ),
-        actions: [
-          PopupMenuButton(
-            onSelected: (value) => Navigator.pushNamed(context, value),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'phone_help',
-                child: Text(
-                  "Help",
-                  style: GoogleFonts.varelaRound(),
-                ),
-              ),
-            ],
-          ),
+        title: const Text("Enter your phone number"),
+        actions: const [
+          CustomPopupMenuButton(value: 'phone_help', title: "Help"),
         ],
       );
     }
 
-    textButton(title) {
-      return TextButton(
-        onPressed: () => Navigator.pop(context),
-        style: TextButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          foregroundColor: Colors.green[400],
-          shadowColor: Colors.transparent,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-        child: Text(
-          "$title",
-          style: GoogleFonts.varelaRound(
-            color: Colors.teal[700],
-          ),
-        ),
-      );
-    }
-
     dialogBox() {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          titlePadding: const EdgeInsets.all(0),
-          title: Container(
-            height: 120,
-            decoration: BoxDecoration(
-              color: Colors.tealAccent[700],
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(4),
-              ),
-            ),
-            child: const Icon(
-              Icons.phone,
-              color: Colors.white,
-              size: 50,
-            ),
-          ),
-          content: Text(
-            "To retrieve you phone number, WhatsApp needs permission to make and manage your calls. "
-            "Without this permission, WhatsApp will be unable to retrieve your phone number form the SIM.",
-            style: GoogleFonts.varelaRound(fontSize: 14),
-          ),
-          actions: [
-            textButton("Not now"),
-            textButton("Continue"),
-          ],
+      return customShowDialog(
+        context,
+        const Icon(
+          Icons.phone,
+          color: Colors.white,
+          size: 50,
         ),
+        "To retrieve you phone number, WhatsApp needs permission to make and manage your calls. "
+        "Without this permission, WhatsApp will be unable to retrieve your phone number form the SIM.",
+        () => Navigator.pop(context),
       );
     }
 
@@ -137,7 +82,7 @@ class _VerificationState extends State<Verification> {
             hintStyle: GoogleFonts.varelaRound(),
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                color: Colors.teal.shade700,
+                color: Colors.teal.shade600,
                 width: 2,
               ),
             ),
@@ -150,41 +95,27 @@ class _VerificationState extends State<Verification> {
       );
     }
 
-    alertDialog(title) {
-      return showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: Text(
-            "$title",
-            style: GoogleFonts.varelaRound(color: Colors.grey[700]),
-          ),
-          actions: [
-            textButton("OK"),
-          ],
-        ),
-      );
-    }
-
     Future sendCode() async {
       try {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
               builder: (context) => OTP(
-                  phone:
-                      '+${countryCodeController.text} ${phoneNumberController.text}'),
+                phone:
+                    '+${countryCodeController.text} ${phoneNumberController.text}',
+              ),
             ),
             (route) => false);
-        // await FirebaseAuth.instance.verifyPhoneNumber(
-        //   phoneNumber:
-        //       '+${countryCodeController.text}${phoneNumberController.text}',
-        //   verificationCompleted: (PhoneAuthCredential credential) {},
-        //   verificationFailed: (FirebaseAuthException e) {},
-        //   codeSent: (String verificationId, int? resendToken) {
-        //     Verification.verify = verificationId;
-        //   },
-        //   codeAutoRetrievalTimeout: (verificationId) {},
-        // );
+        await FirebaseAuth.instance.verifyPhoneNumber(
+          phoneNumber:
+              '+${countryCodeController.text}${phoneNumberController.text}',
+          verificationCompleted: (PhoneAuthCredential credential) {},
+          verificationFailed: (FirebaseAuthException e) {},
+          codeSent: (String verificationId, int? resendToken) {
+            Verification.verify = verificationId;
+          },
+          codeAutoRetrievalTimeout: (verificationId) {},
+        );
       } on FirebaseAuthException catch (e) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context)
@@ -198,41 +129,26 @@ class _VerificationState extends State<Verification> {
       final code = countryCodeController.text;
 
       if (phone.isEmpty) {
-        return alertDialog("Please enter your phone number.");
+        return customAlertDialog(context, "Please enter your phone number.");
       } else if (phone.length <= 9) {
-        return alertDialog(
+        return customAlertDialog(context,
             "The phone number you entered is too short for the country: $name.\n\nInclude your area code if you haven't.");
       } else if (phone.length > 10) {
-        return alertDialog(
+        return customAlertDialog(context,
             "The phone number you entered is too long for the country: $name.");
       } else {
         return showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            content: Text(
-              "You entered the phone number:\n\n+$code $phone\n\nIs this OK, or would you like to edit the number?",
-              style: GoogleFonts.varelaRound(color: Colors.grey[700]),
+            content: CustomText(
+              title:
+                  "You entered the phone number:\n\n+$code $phone\n\nIs this OK, or would you like to edit the number?",
+              color: Colors.grey[700],
             ),
             actions: [
-              textButton("Edit"),
-              TextButton(
-                onPressed: () => sendCode(),
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  foregroundColor: Colors.green[400],
-                  shadowColor: Colors.transparent,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                child: Text(
-                  "OK",
-                  style: GoogleFonts.varelaRound(
-                    color: Colors.teal[700],
-                  ),
-                ),
-              ),
+              CustomTextButton(
+                  title: "Edit", onPressed: () => Navigator.pop(context)),
+              CustomTextButton(title: "OK", onPressed: () => sendCode()),
             ],
           ),
         );
@@ -246,16 +162,13 @@ class _VerificationState extends State<Verification> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              "WhatsApp will need to verify your account.",
-              style: GoogleFonts.varelaRound(),
-              textAlign: TextAlign.center,
-            ),
+            const CustomText(
+                title: "WhatsApp will need to verify your account."),
             GestureDetector(
               onTap: () => dialogBox(),
-              child: Text(
-                "What's my number?",
-                style: GoogleFonts.varelaRound(color: Colors.blue[700]),
+              child: CustomText(
+                title: "What's my number?",
+                color: Colors.blue[700],
               ),
             ),
             Padding(
@@ -266,7 +179,7 @@ class _VerificationState extends State<Verification> {
                 readOnly: true,
                 suffixIcon: Icon(
                   Icons.arrow_drop_down,
-                  color: Colors.teal[700],
+                  color: Colors.teal[600],
                 ),
               ),
             ),
@@ -291,18 +204,16 @@ class _VerificationState extends State<Verification> {
                       hintText: "phone number",
                       textAlign: TextAlign.left,
                       cursorHeight: 25,
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.phone,
                     ),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 10),
-            Text(
-              "Carrier charges may apply",
-              style: GoogleFonts.varelaRound(
-                color: Colors.grey[600],
-              ),
+            CustomText(
+              title: "Carrier charges may apply",
+              color: Colors.grey[600],
             )
           ],
         ),
@@ -310,18 +221,11 @@ class _VerificationState extends State<Verification> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
-        child: ElevatedButton(
+        child: CustomElevatedButton(
           onPressed: () => verify(),
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size(80, 40),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-          ),
-          child: Text(
-            "Next",
-            style: GoogleFonts.varelaRound(fontSize: 12),
-          ),
+          width: 80,
+          height: 40,
+          title: "Next",
         ),
       ),
     );

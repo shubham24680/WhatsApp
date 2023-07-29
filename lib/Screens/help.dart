@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../Components/text_style.dart';
+
 class Help extends StatelessWidget {
   const Help({super.key, this.text, this.onTap});
 
@@ -11,14 +13,12 @@ class Help extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.teal[700],
-        title: Text(
-          "Problem detected",
-          style: GoogleFonts.varelaRound(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
+        backgroundColor: Colors.teal[600],
+        title: const CustomText(
+          title: "Problem detected",
+          color: Colors.white,
+          weight: FontWeight.bold,
+          size: 20,
         ),
       ),
       body: Column(
@@ -40,13 +40,11 @@ class Help extends StatelessWidget {
               height: 60,
               width: double.infinity,
               color: Colors.teal[400],
-              child: Center(
-                child: Text(
-                  "This doesn't answer my question",
-                  style: GoogleFonts.varelaRound(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+              child: const Center(
+                child: CustomText(
+                  title: "This doesn't answer my question",
+                  color: Colors.white,
+                  weight: FontWeight.bold,
                 ),
               ),
             ),
@@ -79,8 +77,8 @@ class OTPHelp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Help(
-      text:
-          "You recently requested a verification code. Please wait the specified amount of time before requesting another verification code. There is no way to expedite this.",
+      text: "You recently requested a verification code."
+          " Please wait the specified amount of time before requesting another verification code. There is no way to expedite this.",
       onTap: () {},
     );
   }

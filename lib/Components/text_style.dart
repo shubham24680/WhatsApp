@@ -27,3 +27,63 @@ class CustomText extends StatelessWidget {
     );
   }
 }
+
+class CustomTextField extends StatelessWidget {
+  const CustomTextField({
+    super.key,
+    this.controller,
+    this.hintText,
+    this.readOnly,
+    this.textAlign,
+    this.keyboardType,
+    this.prefixText,
+    this.onTap,
+    this.suffixIcon,
+    this.onchanged,
+    this.autofocus,
+    this.fontSize,
+    this.cursorHeight,
+  });
+
+  final VoidCallback? onTap;
+  final TextEditingController? controller;
+  final bool? readOnly;
+  final String? prefixText;
+  final Widget? suffixIcon;
+  final String? hintText;
+  final TextAlign? textAlign;
+  final TextInputType? keyboardType;
+  final Function(String)? onchanged;
+  final double? fontSize;
+  final bool? autofocus;
+  final double? cursorHeight;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      onTap: onTap,
+      controller: controller,
+      readOnly: readOnly ?? false,
+      textAlign: textAlign ?? TextAlign.center,
+      keyboardType: readOnly == null ? keyboardType : null,
+      autofocus: autofocus ?? false,
+      cursorColor: Colors.teal[600],
+      cursorHeight: cursorHeight,
+      style: GoogleFonts.varelaRound(fontSize: fontSize),
+      onChanged: onchanged,
+      decoration: InputDecoration(
+        isDense: true,
+        prefixText: prefixText,
+        suffix: suffixIcon,
+        hintText: hintText,
+        hintStyle: GoogleFonts.varelaRound(),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.teal.shade600),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.teal.shade600, width: 2),
+        ),
+      ),
+    );
+  }
+}

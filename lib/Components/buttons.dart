@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'text_style.dart';
 
 class CustomIconButton extends StatelessWidget {
   const CustomIconButton({
@@ -24,17 +27,15 @@ class CustomElevatedButton extends StatelessWidget {
   const CustomElevatedButton({
     super.key,
     this.onPressed,
-    this.child,
     required this.height,
     required this.width,
-    required this.radius,
+    required this.title,
   });
 
   final VoidCallback? onPressed;
-  final Widget? child;
-  final double height;
+  final String title;
   final double width;
-  final double radius;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +43,73 @@ class CustomElevatedButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         minimumSize: Size(width, height),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(radius),
-        ),
       ),
-      child: child,
+      child: Text(title),
+    );
+  }
+}
+
+services(link) async {
+  var url = Uri.parse(link);
+  if (await canLaunchUrl(url)) {
+    await launchUrl(url);
+  } else {
+    throw "Could not launch $url";
+  }
+}
+
+class CustomLink extends StatelessWidget {
+  const CustomLink({super.key, required this.title, required this.link});
+
+  final String? link;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => services(link),
+      child: CustomText(
+        title: title,
+        color: Colors.blue[700],
+      ),
+    );
+  }
+}
+
+class CustomTextButton extends StatelessWidget {
+  const CustomTextButton({super.key, this.onPressed, required this.title});
+
+  final VoidCallback? onPressed;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onPressed,
+      child: CustomText(
+        title: title,
+        color: Colors.teal[600],
+      ),
+    );
+  }
+}
+
+class CustomPopupMenuButton extends StatelessWidget {
+  const CustomPopupMenuButton({super.key, this.value, required this.title});
+
+  final String? value;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+      onSelected: (value) => Navigator.pushNamed(context, value),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          value: value,
+          child: CustomText(title: title),
+        ),
+      ],
     );
   }
 }

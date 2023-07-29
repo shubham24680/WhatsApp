@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
-// import 'package:whatsapp/profile_info.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'Components/firebase_options.dart';
 
-import 'Screens/Home/home.dart';
 import 'Theme/light_theme.dart';
 // import 'Theme/dark_theme.dart';
 import 'Components/route.dart';
+
+// import 'Screens/Home/home.dart';
+import 'Screens/welcome.dart';
+import '/Screens/profile_info.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +37,13 @@ class MainApp extends StatelessWidget {
       onGenerateRoute: (settings) {
         return route(settings);
       },
-      home: const Home(),
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) return const ProfileInfo();
+          return const Welcome();
+        },
+      ),
     );
   }
 }

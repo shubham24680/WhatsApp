@@ -1,37 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:whatsapp/Components/custom_text_field.dart';
 
-class ProfileInfo extends StatelessWidget {
+import '/Components/buttons.dart';
+import '/Components/text_style.dart';
+
+class ProfileInfo extends StatefulWidget {
   const ProfileInfo({super.key});
 
+  @override
+  State<ProfileInfo> createState() => _ProfileInfoState();
+}
+
+class _ProfileInfoState extends State<ProfileInfo> {
   @override
   Widget build(BuildContext context) {
     appbar() {
       return AppBar(
         automaticallyImplyLeading: false,
-        elevation: 0,
         centerTitle: true,
-        title: Text(
-          "Profile info",
-          style: GoogleFonts.varelaRound(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-        ),
-        actions: [
-          PopupMenuButton(
-            onSelected: (value) => Navigator.pushNamed(context, value),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'phone_help',
-                child: Text(
-                  "Help",
-                  style: GoogleFonts.varelaRound(),
-                ),
-              ),
-            ],
-          ),
+        title: const Text("Profile info"),
+        actions: const [
+          CustomPopupMenuButton(value: 'contact_support', title: "Help"),
         ],
       );
     }
@@ -39,23 +28,13 @@ class ProfileInfo extends StatelessWidget {
     return Scaffold(
       appBar: appbar(),
       body: Column(
-        // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(height: 20),
-          Text(
-            "Please provide your name and an optional profile photo",
-            style: GoogleFonts.varelaRound(color: Colors.grey[600]),
+          CustomText(
+            title: "Please provide your name and an optional profile photo",
+            color: Colors.grey[600],
           ),
           const SizedBox(height: 30),
-          CircleAvatar(
-            radius: 60,
-            backgroundColor: Colors.grey[200],
-            child: const Icon(
-              Icons.add_a_photo,
-              size: 45,
-              color: Colors.blueGrey,
-            ),
-          ),
           const SizedBox(height: 30),
           Padding(
             padding: const EdgeInsets.only(left: 20),
