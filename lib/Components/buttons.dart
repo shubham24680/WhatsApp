@@ -8,17 +8,21 @@ class CustomIconButton extends StatelessWidget {
     super.key,
     this.onPressed,
     this.icon,
+    this.color,
+    this.size,
   });
 
   final VoidCallback? onPressed;
   final IconData? icon;
+  final Color? color;
+  final double? size;
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: onPressed,
       splashRadius: 20,
-      icon: Icon(icon, color: Colors.white),
+      icon: Icon(icon, color: color, size: size),
     );
   }
 }
@@ -104,12 +108,48 @@ class CustomPopupMenuButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton(
       onSelected: (value) => Navigator.pushNamed(context, value),
+      splashRadius: 20,
       itemBuilder: (context) => [
         PopupMenuItem(
           value: value,
           child: CustomText(title: title),
         ),
       ],
+    );
+  }
+}
+
+class CustomInkWellButton extends StatelessWidget {
+  const CustomInkWellButton(
+      {super.key, this.onTap, this.icon, required this.title});
+
+  final VoidCallback? onTap;
+  final IconData? icon;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Container(
+            height: 55,
+            width: 55,
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              border: Border.all(width: 1, color: Colors.grey.shade300),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              icon,
+              color: Colors.teal[600],
+            ),
+          ),
+          const SizedBox(height: 10),
+          CustomText(title: title),
+        ],
+      ),
     );
   }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
-import '/Screens/customer_support.dart';
+import '/Screens/Home/home.dart';
+import '../Screens/contact_support.dart';
 import '/Screens/phone_verification.dart';
 import '/Screens/profile_info.dart';
 import '/Screens/Home/contact.dart';
@@ -14,6 +15,7 @@ route(settings) {
     'otp_help': const OTPHelp(),
     'profile_info': const ProfileInfo(),
     'contact_support': const ContactSupport(),
+    'home': const Home(),
     'contact': const Contact(),
   };
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:whatsapp/Components/dialog.dart';
 
+import '/Components/images.dart';
 import '/Components/buttons.dart';
 import '/Components/text_style.dart';
 
@@ -12,6 +14,23 @@ class ProfileInfo extends StatefulWidget {
 }
 
 class _ProfileInfoState extends State<ProfileInfo> {
+  late TextEditingController nameController = TextEditingController();
+  FocusNode focusNode = FocusNode();
+  bool emoji = false;
+
+  @override
+  void initState() {
+    nameController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    focusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     appbar() {
@@ -25,6 +44,15 @@ class _ProfileInfoState extends State<ProfileInfo> {
       );
     }
 
+    submitInfo() {
+      if (nameController.text.isEmpty) {
+        customAlertDialog(
+            context, "You are required to enter your name before continuing.");
+      } else {
+        Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
+      }
+    }
+
     return Scaffold(
       appBar: appbar(),
       body: Column(
@@ -35,26 +63,32 @@ class _ProfileInfoState extends State<ProfileInfo> {
             color: Colors.grey[600],
           ),
           const SizedBox(height: 30),
+          const PickImage(),
           const SizedBox(height: 30),
           Padding(
             padding: const EdgeInsets.only(left: 20),
             child: Row(
               children: [
-                const SizedBox(
+                SizedBox(
                   width: 330,
                   child: CustomTextField(
+                    controller: nameController,
+                    focusNode: focusNode,
                     textAlign: TextAlign.left,
                     hintText: "Type your name here",
                   ),
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.insert_emoticon,
-                    color: Colors.grey,
-                    size: 28,
-                  ),
-                )
+                CustomIconButton(
+                  onPressed: () {
+                    setState(() {
+                      emoji = !emoji;
+                    });
+                    emoji ? focusNode.requestFocus() : focusNode.unfocus();
+                  },
+                  icon: emoji ? Icons.keyboard : Icons.insert_emoticon,
+                  color: Colors.grey,
+                  size: 28,
+                ),
               ],
             ),
           ),
@@ -64,7 +98,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () => submitInfo(),
           style: ElevatedButton.styleFrom(
             minimumSize: const Size(80, 40),
             shape: RoundedRectangleBorder(

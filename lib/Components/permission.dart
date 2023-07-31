@@ -2,27 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 Future<void> requestPermission(context) async {
-  Map<Permission, PermissionStatus> statuses = await [
+  await [
     Permission.contacts,
     Permission.storage,
     //add more permission to request here.
   ].request();
 
-  if (statuses[Permission.contacts]!.isGranted) {
-    //check each permission status after.
-    print("Location permission is denied.");
-  }
-
-  if (statuses[Permission.storage]!.isGranted) {
-    //check each permission status after.
-    print("Camera permission is denied.");
-  }
-
   Navigator.pop(context);
 }
 
-Future<bool> checkStoragePermission() async {
-  const permission = Permission.contacts;
+Future<bool> checkPermission(Permission permission) async {
+  final status = await permission.request();
 
-  return await permission.status.isGranted;
+  if (status.isPermanentlyDenied) {
+    openAppSettings();
+  }
+
+  return status.isGranted;
 }

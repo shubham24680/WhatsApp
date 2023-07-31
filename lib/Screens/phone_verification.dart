@@ -51,20 +51,6 @@ class _VerificationState extends State<Verification> {
       );
     }
 
-    dialogBox() {
-      return customShowDialog(
-        context,
-        const Icon(
-          Icons.phone,
-          color: Colors.white,
-          size: 50,
-        ),
-        "To retrieve you phone number, WhatsApp needs permission to make and manage your calls. "
-        "Without this permission, WhatsApp will be unable to retrieve your phone number form the SIM.",
-        () => Navigator.pop(context),
-      );
-    }
-
     showCountryCodePicker() {
       showCountryPicker(
         context: context,
@@ -165,7 +151,17 @@ class _VerificationState extends State<Verification> {
             const CustomText(
                 title: "WhatsApp will need to verify your account."),
             GestureDetector(
-              onTap: () => dialogBox(),
+              onTap: () => customShowDialog(
+                context,
+                const Icon(
+                  Icons.phone,
+                  color: Colors.white,
+                  size: 50,
+                ),
+                "To retrieve you phone number, WhatsApp needs permission to make and manage your calls. "
+                "Without this permission, WhatsApp will be unable to retrieve your phone number form the SIM.",
+                () => Navigator.pop(context),
+              ),
               child: CustomText(
                 title: "What's my number?",
                 color: Colors.blue[700],

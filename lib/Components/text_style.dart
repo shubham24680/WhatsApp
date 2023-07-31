@@ -43,10 +43,12 @@ class CustomTextField extends StatelessWidget {
     this.autofocus,
     this.fontSize,
     this.cursorHeight,
+    this.focusNode,
   });
 
   final VoidCallback? onTap;
   final TextEditingController? controller;
+  final FocusNode? focusNode;
   final bool? readOnly;
   final String? prefixText;
   final Widget? suffixIcon;
@@ -63,7 +65,9 @@ class CustomTextField extends StatelessWidget {
     return TextFormField(
       onTap: onTap,
       controller: controller,
+      focusNode: focusNode,
       readOnly: readOnly ?? false,
+      maxLength: 25,
       textAlign: textAlign ?? TextAlign.center,
       keyboardType: readOnly == null ? keyboardType : null,
       autofocus: autofocus ?? false,
