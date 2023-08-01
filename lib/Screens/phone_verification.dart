@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:country_picker/country_picker.dart';
 
+import '/Components/auth.dart';
 import '/Components/dialog.dart';
 import '/Components/buttons.dart';
 import '/Components/text_style.dart';
-import 'otp_screen.dart';
 
 class Verification extends StatefulWidget {
   const Verification({super.key});
@@ -81,34 +80,6 @@ class _VerificationState extends State<Verification> {
       );
     }
 
-    Future sendCode() async {
-      try {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => OTP(
-                phone:
-                    '+${countryCodeController.text} ${phoneNumberController.text}',
-              ),
-            ),
-            (route) => false);
-        await FirebaseAuth.instance.verifyPhoneNumber(
-          phoneNumber:
-              '+${countryCodeController.text}${phoneNumberController.text}',
-          verificationCompleted: (PhoneAuthCredential credential) {},
-          verificationFailed: (FirebaseAuthException e) {},
-          codeSent: (String verificationId, int? resendToken) {
-            Verification.verify = verificationId;
-          },
-          codeAutoRetrievalTimeout: (verificationId) {},
-        );
-      } on FirebaseAuthException catch (e) {
-        Navigator.pop(context);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(e.code)));
-      }
-    }
-
     verify() {
       final phone = phoneNumberController.text;
       final name = countryNameController.text;
@@ -134,7 +105,10 @@ class _VerificationState extends State<Verification> {
             actions: [
               CustomTextButton(
                   title: "Edit", onPressed: () => Navigator.pop(context)),
-              CustomTextButton(title: "OK", onPressed: () => sendCode()),
+              CustomTextButton(
+                  title: "OK",
+                  onPressed: () => sendCode(context,
+                      '+${countryCodeController.text}${phoneNumberController.text}')),
             ],
           ),
         );

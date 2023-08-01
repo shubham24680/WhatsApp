@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:whatsapp/Components/dialog.dart';
 
+import '/Components/storage.dart';
 import '/Components/images.dart';
 import '/Components/buttons.dart';
 import '/Components/text_style.dart';
@@ -16,6 +18,7 @@ class ProfileInfo extends StatefulWidget {
 class _ProfileInfoState extends State<ProfileInfo> {
   late TextEditingController nameController = TextEditingController();
   FocusNode focusNode = FocusNode();
+  File? image;
   bool emoji = false;
 
   @override
@@ -46,11 +49,11 @@ class _ProfileInfoState extends State<ProfileInfo> {
 
     submitInfo() {
       if (nameController.text.isEmpty) {
-        customAlertDialog(
+        return customAlertDialog(
             context, "You are required to enter your name before continuing.");
-      } else {
-        Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
       }
+
+      saveUserInfo(context, image, nameController.text, mounted);
     }
 
     return Scaffold(
@@ -63,7 +66,11 @@ class _ProfileInfoState extends State<ProfileInfo> {
             color: Colors.grey[600],
           ),
           const SizedBox(height: 30),
-          const PickImage(),
+          PickImage(
+            getImage: (value) {
+              image = value;
+            },
+          ),
           const SizedBox(height: 30),
           Padding(
             padding: const EdgeInsets.only(left: 20),

@@ -43,3 +43,31 @@ customShowDialog(context, title, content, destination) {
     ),
   );
 }
+
+customLoadingDialog(context, title) {
+  return showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => AlertDialog(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              CircularProgressIndicator(
+                color: Colors.teal[600],
+              ),
+              const SizedBox(width: 20),
+              Expanded(
+                child: CustomText(
+                  title: title,
+                  size: 15,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
+}
