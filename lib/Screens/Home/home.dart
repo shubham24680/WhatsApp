@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:whatsapp/Components/buttons.dart';
+import 'package:whatsapp/Components/images.dart';
 import 'package:whatsapp/Components/text_style.dart';
 import 'package:whatsapp/Theme/custom_theme.dart';
 
@@ -23,7 +26,10 @@ class Home extends StatelessWidget {
             weight: FontWeight.bold,
           ),
           actions: [
-            CustomIconButton(onPressed: () {}, icon: Icons.camera_alt_outlined),
+            CustomIconButton(
+                onPressed: () =>
+                    ImagePicker().pickImage(source: ImageSource.camera),
+                icon: Icons.camera_alt_outlined),
             CustomIconButton(onPressed: () {}, icon: Icons.search),
             CustomIconButton(onPressed: () {}, icon: Icons.more_vert),
           ],

@@ -30,7 +30,10 @@ class Contact extends StatelessWidget {
             ],
           ),
           actions: [
-            CustomIconButton(onPressed: () {}, icon: Icons.search),
+            CustomIconButton(
+              onPressed: () {},
+              icon: Icons.search,
+            ),
             CustomIconButton(onPressed: () {}, icon: Icons.more_vert),
           ],
         ),
