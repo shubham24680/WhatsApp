@@ -1,27 +1,33 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:whatsapp/Components/storage.dart';
 
 import '/Screens/phone_verification.dart';
 import '/Screens/otp_screen.dart';
 import 'dialog.dart';
-import 'permission.dart';
 
 Future sendCode(context, phone) async {
   try {
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => OTP(
-            phone: phone,
-          ),
-        ),
-        (route) => false);
+    Navigator.pop(context);
+    customLoadingDialog(context, "Sending a verification code to $phone");
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phone,
-      verificationCompleted: (PhoneAuthCredential credential) {},
-      verificationFailed: (FirebaseAuthException e) {},
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await auth.signInWithCredential(credential);
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        customAlertDialog(context, e.toString());
+      },
       codeSent: (String verificationId, int? resendToken) {
         Verification.verify = verificationId;
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OTP(
+                phone: phone,
+              ),
+            ),
+            (route) => false);
       },
       codeAutoRetrievalTimeout: (verificationId) {},
     );
@@ -33,6 +39,7 @@ Future sendCode(context, phone) async {
 
 Future verifyCode(context, code) async {
   try {
+    customLoadingDialog(context, "Verifying code ...");
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: Verification.verify, smsCode: code);
     await FirebaseAuth.instance.signInWithCredential(credential);
@@ -40,34 +47,6 @@ Future verifyCode(context, code) async {
     Navigator.pushNamedAndRemoveUntil(
         context, 'profile_info', (route) => false);
     // ignore: use_build_context_synchronously
-    customShowDialog(
-      context,
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Icon(
-            Icons.contacts,
-            color: Colors.white,
-            size: 45,
-          ),
-          SizedBox(width: 15),
-          Icon(
-            Icons.add,
-            color: Colors.white,
-            size: 30,
-          ),
-          SizedBox(width: 15),
-          Icon(
-            Icons.folder,
-            color: Colors.white,
-            size: 50,
-          ),
-        ],
-      ),
-      "Contacts and media\n\n"
-      "To easily send messages and photos to friends and family, allow WhatsApp to access your contacts, photos and other media. ",
-      () => requestPermission(context),
-    );
   } on FirebaseAuthException catch (e) {
     customAlertDialog(context, "The code you entered is incorrect");
   }

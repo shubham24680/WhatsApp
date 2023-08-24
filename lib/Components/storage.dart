@@ -65,3 +65,10 @@ saveUserInfo(context, image, username, mounted) async {
     print("$e");
   }
 }
+
+Future<QuerySnapshot> getData() async {
+  return await FirebaseFirestore.instance
+      .collection('users')
+      .where("uid", isEqualTo: auth.currentUser!.uid)
+      .get();
+}

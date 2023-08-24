@@ -67,7 +67,6 @@ class CustomTextField extends StatelessWidget {
       controller: controller,
       focusNode: focusNode,
       readOnly: readOnly ?? false,
-      maxLength: 25,
       textAlign: textAlign ?? TextAlign.center,
       keyboardType: readOnly == null ? keyboardType : null,
       autofocus: autofocus ?? false,

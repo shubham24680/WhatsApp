@@ -7,7 +7,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:whatsapp/Components/buttons.dart';
 import 'package:whatsapp/Components/permission.dart';
 import 'package:whatsapp/Components/text_style.dart';
-import 'package:whatsapp/Screens/profile_info.dart';
 
 // ignore: must_be_immutable
 class PickImage extends StatefulWidget {

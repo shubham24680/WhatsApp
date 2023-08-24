@@ -48,9 +48,13 @@ class _ProfileInfoState extends State<ProfileInfo> {
     }
 
     submitInfo() {
-      if (nameController.text.isEmpty) {
+      if (nameController.text.trim().isEmpty) {
         return customAlertDialog(
             context, "You are required to enter your name before continuing.");
+      } else if (nameController.text.trim().length < 3 ||
+          nameController.text.trim().length > 25) {
+        return customAlertDialog(
+            context, "You name must have 3 to 25 character long.");
       }
 
       saveUserInfo(context, image, nameController.text, mounted);

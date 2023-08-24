@@ -38,19 +38,13 @@ class _OTPState extends State<OTP> {
           children: [
             CustomText(
                 title:
-                    "Can't send an SMS with your code because you've tried to register ${widget.phone} recently. Request a call or"),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const CustomText(title: "wait before requesting an SMS. "),
-                GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, 'verification'),
-                  child: CustomText(
-                    title: "Wrong number?",
-                    color: Colors.blue[700],
-                  ),
-                ),
-              ],
+                    "Can't send an SMS with your code because you've tried to register ${widget.phone} recently. Request a call or wait before requesting an SMS."),
+            GestureDetector(
+              onTap: () => Navigator.pushNamed(context, 'verification'),
+              child: CustomText(
+                title: "Wrong number?",
+                color: Colors.blue[700],
+              ),
             ),
             Padding(
               padding:
